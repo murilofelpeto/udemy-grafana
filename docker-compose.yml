@@ -4,11 +4,39 @@ volumes:
   grafana_data: {}
 
 services:
+  db:
+    container_name: udemy_mysql
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test123
+      MYSQL_PASSWORD: test123
+      MYSQL_USER: user
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/configuration/my.cnf:/etc/mysql/conf.d/mysql.cnf
+  adminer:
+    container_name: udemy_adminer
+    image: adminer:latest
+    restart: always
+    ports:
+      - 8111:8080
+  flyway:
+    image: flyway/flyway:7.5.2
+    command: -url=jdbc:mysql://db -schemas=exampledb -user=root -password=test123 -connectRetries=60 migrate
+    volumes:
+      - ./flyway/migration/exampledb:/flyway/sql
+    depends_on:
+      - db
   grafana:
     container_name: udemy_grafana
     image: grafana/grafana-oss:8.2.4
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning/datasource:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboard:/etc/grafana/provisioning/dashboards
     environment:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
@@ -31,3 +59,15 @@ services:
     network_mode: host
     expose:
       - 80
+  loki:
+    container_name: udemy_loki
+    image: grafana/loki:2.5.0
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/local-config.yaml
+  promtail:
+    container_name: udemy_promtail
+    image: grafana/promtail:2.5.0
+    volumes:
+      - /var/log:/var/log
+    command: -config.file=/etc/promtail/config.yml
