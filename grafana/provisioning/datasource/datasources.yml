@@ -16,3 +16,12 @@ datasources:
     readOnly: false
     secureJsonData:
       password: test123
+  - name: Loki
+    type: loki
+    typeName: Loki
+    typeLogoUrl: public/app/plugins/datasource/loki/img/loki_icon.svg
+    access: proxy
+    url: localhost:3100
+    basicAuth: false
+    isDefault: false
+    readOnly: false
