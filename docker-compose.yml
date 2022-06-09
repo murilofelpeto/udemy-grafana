@@ -2,6 +2,7 @@ version: '3.4'
 
 volumes:
   grafana_data: {}
+  prometheus_data: {}
 
 services:
   db:
@@ -80,7 +81,7 @@ services:
               level:
   nginx:
     container_name: udemy_nginx
-    image: nginx
+    image: nginx:latest
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     environment:
@@ -119,3 +120,44 @@ services:
     volumes:
       - /var/log:/var/log
     command: -config.file=/etc/promtail/config.yml
+  prometheus:
+    container_name: udemy_prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.external-url=/prometheus/'
+      - '--web.route-prefix=/'
+    expose:
+      - 9090
+    restart: always
+    network_mode: host
+    labels:
+      org.label-schema.group: "monitoring"
+  cadvisor:
+    container_name: udemy_cadvisor
+    image: gcr.io/cadvisor/cadvisor
+    ports:
+      - 8112:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+  nginx-exporter:
+    container_name: udemy_nginx_exporter
+    image: nginx/nginx-prometheus-exporter:latest
+    network_mode: host
+    expose:
+      - 9113
+    environment:
+      - SCRAPE_URI=http://localhost:80/metrics
+      - NGINX_RETRIES=10
+    
