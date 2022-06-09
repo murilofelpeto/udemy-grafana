@@ -1,187 +1,188 @@
 {
-    "annotations": {
-      "list": [
-        {
-          "builtIn": 1,
-          "datasource": "-- Grafana --",
-          "enable": true,
-          "hide": true,
-          "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations & Alerts",
-          "target": {
-            "limit": 100,
-            "matchAny": false,
-            "tags": [],
-            "type": "dashboard"
-          },
-          "type": "dashboard"
-        }
-      ]
-    },
-    "editable": true,
-    "fiscalYearStartMonth": 0,
-    "gnetId": null,
-    "graphTooltip": 0,
-    "id": 4,
-    "links": [],
-    "liveNow": false,
-    "panels": [
+  "annotations": {
+    "list": [
       {
-        "datasource": "Loki",
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 12,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": "Loki",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "8.2.4",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({compose_service=\"nginx\"} | pattern `<remote_addr> - -`[$__range])) by (remote_addr)",
+          "legendFormat": "{{remote_addr}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Access by time range",
+      "type": "bargauge"
+    },
+    {
+      "datasource": "Loki",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
             },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 16,
-          "w": 24,
-          "x": 0,
-          "y": 0
-        },
-        "id": 4,
-        "options": {
-          "displayMode": "lcd",
-          "orientation": "horizontal",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "showUnfilled": true,
-          "text": {}
-        },
-        "pluginVersion": "8.2.4",
-        "targets": [
-          {
-            "expr": "sum(count_over_time({compose_service=\"nginx\"} | pattern `<remote_addr> - -`[$__range])) by (remote_addr)",
-            "legendFormat": "{{remote_addr}}",
-            "refId": "A"
-          }
-        ],
-        "title": "Access by time range",
-        "type": "bargauge"
-      },
-      {
-        "datasource": "Loki",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "smooth",
-              "lineStyle": {
-                "fill": "solid"
-              },
-              "lineWidth": 2,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
               }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "opm"
+            ]
           },
-          "overrides": []
+          "unit": "opm"
         },
-        "gridPos": {
-          "h": 18,
-          "w": 24,
-          "x": 0,
-          "y": 16
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "right"
         },
-        "id": 2,
-        "options": {
-          "legend": {
-            "calcs": [
-              "max",
-              "mean",
-              "lastNotNull"
-            ],
-            "displayMode": "table",
-            "placement": "right"
-          },
-          "tooltip": {
-            "mode": "single"
-          }
-        },
-        "pluginVersion": "8.2.4",
-        "targets": [
-          {
-            "expr": "sum(count_over_time({compose_service=\"nginx\"} | pattern `<_> - - <_> \"<method> <request> <_>\" <status> <_> <_> \"<_>\" <_>`[1m])) by (method, status, request)",
-            "legendFormat": "{{method}} -- {{request}} -- {{status}}",
-            "refId": "A"
-          }
-        ],
-        "title": "Nginx passed proxy",
-        "type": "timeseries"
-      }
-    ],
-    "schemaVersion": 32,
-    "style": "dark",
-    "tags": [
-      "Nginx"
-    ],
-    "templating": {
-      "list": []
-    },
-    "time": {
-      "from": "now-30m",
-      "to": "now"
-    },
-    "timepicker": {},
-    "timezone": "",
-    "title": "Nginx logs",
-    "uid": "xZP1GRjnk",
-    "version": 3
-  }
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.4",
+      "targets": [
+        {
+          "expr": "sum(count_over_time({compose_service=\"nginx\"} | pattern `<_> - - <_> \"<method> <request> <_>\" <status> <_> <_> \"<_>\" <_>`[1m])) by (method, status, request)",
+          "legendFormat": "{{method}} -- {{request}} -- {{status}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Nginx passed proxy",
+      "type": "timeseries"
+    }
+  ],
+  "schemaVersion": 32,
+  "style": "dark",
+  "tags": [
+    "nginx",
+    "logs"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Nginx logs",
+  "uid": "xZP1GRjnk",
+  "version": 3
+}

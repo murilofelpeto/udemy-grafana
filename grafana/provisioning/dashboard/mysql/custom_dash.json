@@ -23,7 +23,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 10,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -225,7 +225,8 @@
   "schemaVersion": 32,
   "style": "dark",
   "tags": [
-    "MyMySQL"
+    "mysql",
+    "database"
   ],
   "templating": {
     "list": []
@@ -238,5 +239,5 @@
   "timezone": "",
   "title": "Custom dashes",
   "uid": "wp7i_Y97k",
-  "version": 2
+  "version": 3
 }

@@ -133,6 +133,7 @@ services:
       - '--web.console.templates=/usr/share/prometheus/consoles'
       - '--web.external-url=/prometheus/'
       - '--web.route-prefix=/'
+      - '--web.enable-lifecycle'
     expose:
       - 9090
     restart: always
@@ -160,4 +161,19 @@ services:
     environment:
       - SCRAPE_URI=http://localhost:80/metrics
       - NGINX_RETRIES=10
-    
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: udemy_node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    network_mode: host
