@@ -3,6 +3,7 @@ version: '3.4'
 volumes:
   grafana_data: {}
   prometheus_data: {}
+  influxdb2:
 
 services:
   db:
@@ -177,3 +178,35 @@ services:
     expose:
       - 9100
     network_mode: host
+  influxdb:
+    image: quay.io/influxdb/influxdb:v2.0.3
+    container_name: udemy_influxdb
+    volumes:
+      # Mount for influxdb data directory and configuration
+      - ./influx/volume/tmp/testdata/influx:/root/.influxdb2:rw
+    ports:
+      - "8086:8086"
+  # Use the influx cli to set up an influxdb instance. 
+  influxdb_cli:
+    links:
+      - influxdb
+    image: quay.io/influxdb/influxdb:v2.0.3
+    container_name: udemy_influx_cli
+# Use these same configurations parameters in your telegraf configuration, mytelegraf.conf.
+    entrypoint: influx setup --bucket telegraf -t admin -o grafana --username=admin --password=teste123 --host=http://influxdb:8086 -f
+      # Wait for the influxd service in the influxdb container has fully bootstrapped before trying to setup an influxdb instance with the influxdb_cli service. 
+    restart: on-failure:10
+    depends_on:
+      - influxdb
+  telegraf:
+    image: telegraf
+    container_name: udemy_telegraf
+    links:
+      - influxdb
+    volumes:
+      # Mount for telegraf config
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - influxdb_cli
+    user: telegraf:998
